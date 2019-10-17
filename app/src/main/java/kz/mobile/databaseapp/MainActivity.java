@@ -25,8 +25,8 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        //initDatabase();
-        initRoomDatabase();
+        initDatabase();
+        //initRoomDatabase();
         initViews();
     }
 
@@ -60,23 +60,24 @@ public class MainActivity extends AppCompatActivity {
 
     private void createPerson(String name, String surname, int age) {
         Person person = new Person(name, surname, age);
-        //new CreatePersonAsync().execute(person);
+        new CreatePersonAsync().execute(person);
     }
 
     private void createPerson2(String name, String surname, int age) {
-        Person2 person = new Person2();
+        Person person = new Person();
         person.setName(name);
         person.setAge(age);
         person.setSurname(surname);
         new CreatePersonAsync().execute(person);
     }
 
-    class CreatePersonAsync extends AsyncTask<Person2, Void, Void> {
+    class CreatePersonAsync extends AsyncTask<Person, Void, Void> {
 
         @Override
-        protected Void doInBackground(Person2... people) {
-            roomDatabase.daoPerson().insert(people[0]);
-            //databaseHelper.insert(people[0]);
+        protected Void doInBackground(Person... people) {
+            //roomDatabase.daoPerson().insert(people[0]);
+            Log.d("person_data", people[0].toString());
+            databaseHelper.insert(people[0]);
             return null;
         }
     }

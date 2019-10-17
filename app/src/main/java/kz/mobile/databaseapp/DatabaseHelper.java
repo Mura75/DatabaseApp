@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
 import androidx.annotation.Nullable;
 
@@ -32,7 +33,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         String createPersonTable = "CREATE TABLE " +
                 PERSON_TABLE +
                 "(" +
-                    PERSON_ID + " INTEGER PRIMARY KEY, " +
+                    PERSON_ID + " INTEGER PRIMARY KEY AUTOINCREMENT DEFAULT 1, " +
                     PERSON_NAME + " TEXT, " +
                     PERSON_SURNAME + " TEXT, " +
                     PERSON_AGE + " INTEGER" +
@@ -50,6 +51,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         SQLiteDatabase database = getWritableDatabase();
 
         ContentValues values = new ContentValues();
+
         values.put(PERSON_NAME, person.getName());
         values.put(PERSON_SURNAME, person.getSurname());
         values.put(PERSON_AGE, person.getAge());
@@ -109,16 +111,14 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         SQLiteDatabase database = getReadableDatabase();
         Cursor cursor = database.rawQuery("SELECT * FROM " + PERSON_TABLE, null);
         List<Person> persons = new ArrayList<>();
-        if (cursor.moveToFirst()) {
-            while (cursor.moveToNext()) {
-                Person person = new Person(
-                        Integer.parseInt(cursor.getString(0)),
-                        cursor.getString(1),
-                        cursor.getString(2),
-                        Integer.parseInt(cursor.getString(3))
-                );
-                persons.add(person);
-            }
+        while (cursor.moveToNext()) {
+            Person person = new Person(
+                    Integer.parseInt(cursor.getString(0)),
+                    cursor.getString(1),
+                    cursor.getString(2),
+                    Integer.parseInt(cursor.getString(3))
+            );
+            persons.add(person);
         }
         return persons;
     }
